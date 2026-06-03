@@ -16,6 +16,7 @@
       "unknown": "Unexpected error occurred. Please check the logs for more details."
     },
     "abort": {
+      "already_configured": "This NexBlue account is already configured.",
       "single_instance_allowed": "Only a single instance is allowed."
     }
   },

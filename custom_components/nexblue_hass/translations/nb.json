@@ -14,6 +14,7 @@
       "auth": "Brukernavn/Passord er feil."
     },
     "abort": {
+      "already_configured": "Denne NexBlue-konto er allerede konfigurert.",
       "single_instance_allowed": "Denne integrasjonen kan kun konfigureres en gang."
     }
   },
