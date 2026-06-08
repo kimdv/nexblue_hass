@@ -104,6 +104,35 @@ async def test_async_step_user_invalid_credentials(mock_hass):
 
 
 @pytest.mark.asyncio
+async def test_async_step_user_empty_username_returns_form_error(mock_hass):
+    """Test async_step_user rejects usernames containing only whitespace."""
+    flow_handler = NexBlueFlowHandler()
+    flow_handler.hass = mock_hass
+
+    user_input = {CONF_USERNAME: "   ", CONF_PASSWORD: "password123"}
+
+    with (
+        patch.object(flow_handler, "_async_current_entries") as mock_current_entries,
+        patch.object(
+            flow_handler, "async_set_unique_id", new_callable=AsyncMock
+        ) as mock_set_unique_id,
+        patch.object(
+            flow_handler, "_abort_if_unique_id_configured"
+        ) as mock_abort_if_configured,
+        patch.object(flow_handler, "_test_credentials") as mock_test_credentials,
+    ):
+        result = await flow_handler.async_step_user(user_input)
+
+    assert result["type"] == "form"
+    assert result["step_id"] == "user"
+    assert result["errors"][CONF_USERNAME] == "username_required"
+    mock_current_entries.assert_not_called()
+    mock_set_unique_id.assert_not_called()
+    mock_abort_if_configured.assert_not_called()
+    mock_test_credentials.assert_not_called()
+
+
+@pytest.mark.asyncio
 async def test_async_step_user_normalizes_unique_id(mock_hass):
     """Test async_step_user normalizes the duplicate-checking unique ID."""
     flow_handler = NexBlueFlowHandler()

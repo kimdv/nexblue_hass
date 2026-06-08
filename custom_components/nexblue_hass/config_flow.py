@@ -31,6 +31,10 @@ class NexBlueFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         if user_input is not None:
             username = user_input[CONF_USERNAME].strip()
             user_input = {**user_input, CONF_USERNAME: username}
+            if not username:
+                self._errors[CONF_USERNAME] = "username_required"
+                return await self._show_config_form(user_input)
+
             normalized_username = username.casefold()
 
             for entry in self._async_current_entries():
